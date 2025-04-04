@@ -3,265 +3,242 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Liquidación del Día</title>
+  <title>Punto de Venta</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       background-color: #000;
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
-
     .main {
       display: flex;
-      flex: 1;
+      flex-direction: row;
+      min-height: 100vh;
+      flex-wrap: wrap;
     }
-
-    .sidebar {
-      width: 220px;
+    .menu-lateral {
+      width: 200px;
       background-color: #111;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      box-sizing: border-box;
     }
-
-    .sidebar button {
-      padding: 12px;
-      background-color: #222;
-      color: #00aaff;
-      border: 1px solid #00aaff;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .sidebar button.active {
-      background-color: #00aaff;
-      color: #000;
-    }
-
-    .content {
-      flex: 1;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .formulario-area {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .formulario {
-      flex: 1;
-      background-color: #111;
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    .ventas-tabla {
-      width: 50%;
-      background-color: #111;
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    .resumen {
-      background-color: #111;
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px;
-    }
-
-    h1, h2 {
-      color: #00aaff;
-    }
-
-    label {
+    .menu-lateral button {
       display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    input[type="text"], input[type="number"] {
       width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: none;
-      border-radius: 5px;
-      background-color: #222;
-      color: #fff;
-    }
-
-    button.submit {
-      background-color: #00aaff;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      color: #fff;
-    }
-
-    th, td {
-      border-bottom: 1px solid #333;
       padding: 10px;
-      text-align: left;
+      margin-bottom: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
-
+    .contenido-principal {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .secciones-superiores {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
     .modulo {
-      display: none;
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 10px;
+      flex: 1;
+      min-width: 300px;
     }
-
-    .modulo.active {
-      display: block;
+    .modulo h2 {
+      margin-top: 0;
+    }
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: #444;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .seccion-inferior {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .liquidacion, #compras-dia, #gastos-dia {
+      background-color: #222;
+      padding: 15px;
+      border-top: 2px solid #007bff;
+      border-radius: 10px;
+      flex: 1;
+      min-width: 300px;
+    }
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+      }
+      .menu-lateral {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+      .contenido-principal {
+        padding: 10px;
+      }
+      .seccion-inferior {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
   <div class="main">
-    <div class="sidebar">
+    <div class="menu-lateral">
       <button onclick="mostrarModulo('ventas')">Registrar Ventas</button>
       <button onclick="mostrarModulo('compras')">Registrar Compras</button>
       <button onclick="mostrarModulo('gastos')">Registrar Gastos</button>
     </div>
-
-    <div class="content">
-      <h1>Liquidación del Día</h1>
-      <div class="formulario-area">
-        <div class="formulario">
-          <div class="modulo" id="ventas">
-            <h2>Agregar Venta</h2>
-            <label for="producto">Producto:</label>
-            <input type="text" id="producto">
-            <label for="valor">Valor ($):</label>
-            <input type="number" id="valor">
-            <button class="submit" onclick="agregarVenta()">Registrar Venta</button>
-          </div>
-
-          <div class="modulo" id="compras">
-            <h2>Registrar Compra</h2>
-            <label for="detalleCompra">Detalle del artículo:</label>
-            <input type="text" id="detalleCompra">
-            <label for="valorCompra">Valor de la compra ($):</label>
-            <input type="number" id="valorCompra">
-            <button class="submit" onclick="agregarCompra()">Registrar Compra</button>
-          </div>
-
-          <div class="modulo" id="gastos">
-            <h2>Registrar Gasto</h2>
-            <label for="descripcionGasto">Descripción del gasto:</label>
-            <input type="text" id="descripcionGasto">
-            <label for="valorGasto">Valor del gasto ($):</label>
-            <input type="number" id="valorGasto">
-            <button class="submit" onclick="agregarGasto()">Registrar Gasto</button>
-          </div>
+    <div class="contenido-principal">
+      <div class="secciones-superiores">
+        <!-- Módulo Ventas -->
+        <div class="modulo" id="modulo-ventas">
+          <h2>Registrar Ventas</h2>
+          <input type="text" id="producto" placeholder="" />
+          <input type="number" id="valor" placeholder="" />
+          <button onclick="registrarVenta()">Registrar</button>
         </div>
 
-        <div class="ventas-tabla">
+        <!-- Módulo Compras -->
+        <div class="modulo" id="modulo-compras" style="display: none;">
+          <h2>Registrar Compras</h2>
+          <input type="text" id="detalleCompra" placeholder="" />
+          <input type="number" id="valorCompra" placeholder="" />
+          <button onclick="registrarCompra()">Registrar Compra</button>
+        </div>
+
+        <!-- Módulo Gastos -->
+        <div class="modulo" id="modulo-gastos" style="display: none;">
+          <h2>Registrar Gastos</h2>
+          <input type="text" id="detalleGasto" placeholder="" />
+          <input type="number" id="valorGasto" placeholder="" />
+          <button onclick="registrarGasto()">Registrar Gasto</button>
+        </div>
+
+        <!-- Ventas del día -->
+        <div class="modulo" id="ventas-dia">
           <h2>Ventas del Día</h2>
-          <table id="tablaVentas">
-            <thead>
-              <tr><th>Producto</th><th>Valor ($)</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <ul id="listaVentas"></ul>
         </div>
       </div>
 
-      <div class="resumen">
-        <h2>Resumen del Día</h2>
-        <p>Total Ventas: <span id="totalVentas">$0</span></p>
-        <p>Productos Vendidos: <span id="totalProductos">0</span></p>
-        <p>Total Gastos: <span id="totalGastos">$0</span></p>
-        <p>Total Compras: <span id="totalCompras">$0</span></p>
-        <p>Efectivo en Caja: <span id="efectivoCaja">$0</span></p>
+      <div class="seccion-inferior">
+        <!-- Compras del día -->
+        <div id="compras-dia">
+          <h2>Compras del Día</h2>
+          <ul id="listaCompras"></ul>
+        </div>
+
+        <!-- Gastos del día -->
+        <div id="gastos-dia">
+          <h2>Gastos del Día</h2>
+          <ul id="listaGastos"></ul>
+        </div>
+
+        <!-- Módulo de Liquidación -->
+        <div class="liquidacion">
+          <h2>Liquidación</h2>
+          <p>Total Ventas: $<span id="totalVentas">0</span></p>
+          <p>Total Compras: $<span id="totalCompras">0</span></p>
+          <p>Total Gastos: $<span id="totalGastos">0</span></p>
+          <p>Efectivo en Caja: $<span id="efectivoCaja">0</span></p>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    let totalVentas = 0;
-    let totalGastos = 0;
-    let totalProductos = 0;
-    let totalCompras = 0;
+    let ventas = [], compras = [], gastos = [];
 
-    function formatearValor(valor) {
-      return valor % 1 === 0 ? valor.toFixed(0) : valor.toFixed(2);
+    function mostrarModulo(modulo) {
+      document.getElementById('modulo-ventas').style.display = modulo === 'ventas' ? 'block' : 'none';
+      document.getElementById('modulo-compras').style.display = modulo === 'compras' ? 'block' : 'none';
+      document.getElementById('modulo-gastos').style.display = modulo === 'gastos' ? 'block' : 'none';
     }
 
-    function mostrarModulo(id) {
-      document.querySelectorAll('.modulo').forEach(m => m.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-    }
-
-    function agregarVenta() {
+    function registrarVenta() {
       const producto = document.getElementById('producto').value;
       const valor = parseFloat(document.getElementById('valor').value);
-      if (!producto || isNaN(valor)) {
-        alert("Por favor, ingresa un producto y un valor válido.");
-        return;
+      if (producto && valor) {
+        ventas.push({ producto, valor });
+        actualizarLista('listaVentas', ventas, 'producto');
+        actualizarTotales();
+        document.getElementById('producto').value = '';
+        document.getElementById('valor').value = '';
       }
-      const fila = document.getElementById('tablaVentas').getElementsByTagName('tbody')[0].insertRow();
-      fila.insertCell(0).textContent = producto;
-      fila.insertCell(1).textContent = "$" + formatearValor(valor);
-      totalVentas += valor;
-      totalProductos += 1;
-      actualizarResumen();
-      document.getElementById('producto').value = "";
-      document.getElementById('valor').value = "";
     }
 
-    function agregarGasto() {
-      const descripcion = document.getElementById('descripcionGasto').value;
-      const valor = parseFloat(document.getElementById('valorGasto').value);
-      if (!descripcion || isNaN(valor)) {
-        alert("Por favor, ingresa una descripción y un valor válido.");
-        return;
-      }
-      totalGastos += valor;
-      actualizarResumen();
-      document.getElementById('descripcionGasto').value = "";
-      document.getElementById('valorGasto').value = "";
-    }
-
-    function agregarCompra() {
+    function registrarCompra() {
       const detalle = document.getElementById('detalleCompra').value;
       const valor = parseFloat(document.getElementById('valorCompra').value);
-      if (!detalle || isNaN(valor)) {
-        alert("Por favor, ingresa el detalle y el valor de la compra.");
-        return;
+      if (detalle && valor) {
+        compras.push({ detalle, valor });
+        actualizarLista('listaCompras', compras, 'detalle');
+        actualizarTotales();
+        document.getElementById('detalleCompra').value = '';
+        document.getElementById('valorCompra').value = '';
       }
-      totalCompras += valor;
-      actualizarResumen();
-      document.getElementById('detalleCompra').value = "";
-      document.getElementById('valorCompra').value = "";
     }
 
-    function actualizarResumen() {
-      const efectivo = totalVentas - totalGastos - totalCompras;
-      document.getElementById('totalVentas').textContent = "$" + formatearValor(totalVentas);
-      document.getElementById('totalGastos').textContent = "$" + formatearValor(totalGastos);
-      document.getElementById('totalCompras').textContent = "$" + formatearValor(totalCompras);
-      document.getElementById('efectivoCaja').textContent = "$" + formatearValor(efectivo);
-      document.getElementById('totalProductos').textContent = totalProductos;
+    function registrarGasto() {
+      const detalle = document.getElementById('detalleGasto').value;
+      const valor = parseFloat(document.getElementById('valorGasto').value);
+      if (detalle && valor) {
+        gastos.push({ detalle, valor });
+        actualizarLista('listaGastos', gastos, 'detalle');
+        actualizarTotales();
+        document.getElementById('detalleGasto').value = '';
+        document.getElementById('valorGasto').value = '';
+      }
     }
 
-    mostrarModulo('ventas'); // mostrar ventas por defecto
+    function actualizarLista(id, lista, campo) {
+      const ul = document.getElementById(id);
+      ul.innerHTML = '';
+      lista.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item[campo]} - $${item.valor}`;
+        ul.appendChild(li);
+      });
+    }
+
+    function actualizarTotales() {
+      const totalVentas = ventas.reduce((sum, v) => sum + v.valor, 0);
+      const totalCompras = compras.reduce((sum, c) => sum + c.valor, 0);
+      const totalGastos = gastos.reduce((sum, g) => sum + g.valor, 0);
+      const efectivoCaja = totalVentas - totalCompras - totalGastos;
+
+      document.getElementById('totalVentas').textContent = totalVentas;
+      document.getElementById('totalCompras').textContent = totalCompras;
+      document.getElementById('totalGastos').textContent = totalGastos;
+      document.getElementById('efectivoCaja').textContent = efectivoCaja;
+    }
   </script>
 </body>
 </html>
